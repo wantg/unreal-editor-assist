@@ -38,6 +38,7 @@ public class Assist : ModuleRules
 				"InputCore",
 				"EditorFramework",
 				"UnrealEd",
+				"MainFrame",
 				"ToolMenus",
 				"CoreUObject",
 				"Engine",
@@ -55,6 +56,7 @@ public class Assist : ModuleRules
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[]
 			{
+				"OutputLog",
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
