@@ -36,6 +36,7 @@
 #include "ToolMenus.h"
 #include "ToolMenu.h"
 #include "ToolMenuSection.h"
+#include "HAL/PlatformMisc.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogAssist, Log, All);
 
@@ -319,7 +320,7 @@ void FAssistModule::RegisterEditorMenu(const FString& MenuModule) {
     FToolMenuSection& SectionLayout = AssistMenu->AddSection("Layout", LOCTEXT("LayoutSection", "Layout"));
     SectionLayout.AddEntry(FToolMenuEntry::InitMenuEntry(
         "SetFlexibleLayout",
-        LOCTEXT("FlexibleLayout", "Flexible Layout"),
+        LOCTEXT("FlexibleLayout", "Global Content Browser"),
         LOCTEXT("FlexibleLayoutTooltip", "Create left and bottom docking areas for general-purpose tool panels. Stop Play or Simulate before changing layouts."),
         FSlateIcon(FAssistStyle::GetStyleSetName(), "Assist.FlexibleLayout"),
         FUIAction(FExecuteAction::CreateRaw(this, &FAssistModule::SetFlexibleLayout),
@@ -328,6 +329,17 @@ void FAssistModule::RegisterEditorMenu(const FString& MenuModule) {
     SectionLayout.AddDynamicEntry("DefaultEditorLayoutShortcut",
         FNewToolMenuSectionDelegate::CreateRaw(this, &FAssistModule::AddDefaultEditorLayoutShortcut));
 
+    FString UserName;
+    FString HomeDir;
+#if PLATFORM_WINDOWS
+    UserName = FPlatformMisc::GetEnvironmentVariable(TEXT("USERNAME"));
+    HomeDir  = FPlatformMisc::GetEnvironmentVariable(TEXT("USERPROFILE"));
+#elif PLATFORM_MAC
+    UserName = FPlatformMisc::GetEnvironmentVariable(TEXT("USER"));
+    HomeDir  = FPlatformMisc::GetEnvironmentVariable(TEXT("HOME"));
+#endif
+
+    if (UserName != "wantg") return;
     // Section Language
     FToolMenuSection& SectionLanguage = AssistMenu->AddSection("Language", LOCTEXT("LanguageSection", "Language"));
     SectionLanguage.AddEntry(FToolMenuEntry::InitMenuEntry(
